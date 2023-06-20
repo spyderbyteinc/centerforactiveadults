@@ -1,0 +1,2 @@
+
+sql = "INSERT INTO `no_forms` (`id`, `last_name`, `first_name`, `first_visit_main`, `spouse`, `first_visit_spouse`, `address`, `city`, `state`, `zip`, `home_phone`, `municipality`) VALUES (NULL, '{last_name}', '{first_name}', '{first_visit}', '{spouse}', '{spouse_visit}', '{address}', '{city}', '{state}', '{zipcode}', '{home_phone}', '{municipality}');"

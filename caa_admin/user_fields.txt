@@ -1,0 +1,39 @@
+Member
+    Last Name
+    First Name
+    Key/Tag #
+    Last Visit (Main)
+    Spouse First Name
+    Last Visit (Spouse)
+    Address
+    City
+    State
+    ZIP
+    Home Phone
+    Municipality
+    Email
+    Newsletter
+    Emergency Contact 1
+    Emergency Phone Number 1
+    Emergency Contact 2
+    Emergency Phone Number 2
+    Number In Home
+    Head of Household
+    Race
+    62 Older
+    Membership Date
+    Member Fee Paid / Notes
+    Vaccine
+
+No Form
+    Last Name
+    First Name
+    First Visit (Main)
+    Spouse
+    First Visit (Spouse)
+    Address
+    City
+    State
+    ZIP
+    Home Phone
+    Municipality42.4726703376471, -83.650787841068

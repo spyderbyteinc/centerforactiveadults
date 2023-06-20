@@ -1,0 +1,22 @@
+
+         $.ajax({
+            type: 'POST',
+            url: "ajax.php",
+            async: false,
+            dataType: "json",
+            data: {
+                'type': 'delete_staff',
+                'id': id
+            },
+            success: function (out) {
+                var id = out.replace("done_", "");
+
+                var selector = "#my_staff_item_" + id;
+                $(selector).remove();
+
+                $("#deleteStaffMember").css("display", "none");
+            }
+        });
+
+
+    $(document).on("click",".my_picture_chooser",function() {

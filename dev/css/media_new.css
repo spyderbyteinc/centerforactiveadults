@@ -1,0 +1,179 @@
+/*------------------------------------------
+  Responsive Grid Media Queries - 1280, 1024, 768, 480
+   1280-1024   - desktop (default grid)
+   1024-768    - tablet landscape
+   768-480     - tablet 
+   480-less    - phone landscape & smaller
+--------------------------------------------*/
+@media all and (min-width: 1024px) and (max-width: 1280px) {
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px) {
+    #main_content {
+        width: 90% !important;
+    }
+    #center_staff_container .staff_row .staff_item {
+        width: 45%;
+    }
+    #center_staff_container .staff_row .staff_item img.staff_picture {
+        height: 400px;
+    }
+    #popup_slides .image_container img {
+        width: 75%;
+    }
+    #popup_slides .image_container {
+        margin: auto;
+    }
+}
+
+@media all and (min-width: 480px) and (max-width: 768px) {
+    #main_content {
+        width: 87%;
+        padding: 3%;
+        margin: 3%;
+    }
+    #heading .heading_container #serving_col .box_container {
+        width: 360px;
+    }
+    #center_staff_container .staff_row .staff_item {
+        width: 45%;
+    }
+    #center_staff_container .staff_row .staff_item img.staff_picture {
+        height: 350px !important;
+    }
+    #class_section {
+        display: none !important;
+    }
+    #contact_section {
+        flex-direction: column !important;
+    }
+    #contact_section .contact_module {
+        width: 100% !important;
+        margin-bottom: 25px;
+    }
+    .statement_handler h5 {
+        font-size: 22px;
+    }
+}
+
+@media all and (max-width: 480px) {
+    #main_content {
+        width: 80%;
+        overflow-x: hidden;
+    }
+    .heading_container {
+        align-items: center;
+        flex-direction: column;
+    }
+    .hr_hook {
+        margin-top: 200px;
+    }
+
+    #heading {
+        height: 250px !important;
+    }
+    #heading .heading_container #image_col {
+        width: 100%;
+        margin-left: 0px;
+    }
+    .header_col {
+        display: block !important;
+        width: 100% !important;
+    }
+    .box_container {
+        width: 90% !important;
+    }
+    .phone_and_email {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .phone_and_email span:first-child {
+        margin-bottom: 15px;
+    }
+    .bullet {
+        display: none;
+    }
+    .staff_row {
+        display: flex;
+        flex-direction: column;
+    }
+    #center_staff_container .staff_row .staff_item {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 20px;
+        background-color: whitesmoke;
+    }
+    .staff_contact {
+        margin-bottom: 20px;
+    }
+    #class_section {
+        display: none;
+    }
+    #contact_section {
+        flex-direction: column;
+    }
+    #contact_section .contact_module {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    #map {
+        width: 100%;
+        height: 475px !important;
+    }
+    .mission_body {
+        text-align: center;
+    }
+    .statement_body,
+    .statement_handler {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    .statement_handler h5 {
+        font-size: 21px;
+    }
+    #center_details .detail_box {
+        width: 90%;
+        padding: 5%;
+    }
+}
+
+/* Portrait */
+@media screen and (orientation: portrait) {
+    /* Portrait styles here */
+}
+/* Landscape */
+@media screen and (orientation: landscape) {
+    /* Landscape styles here */
+}
+
+/* CSS for iPhone, iPad, and Retina Displays */
+
+/* Non-Retina */
+@media screen and (-webkit-max-device-pixel-ratio: 1) {
+}
+
+/* Retina */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-o-min-device-pixel-ratio: 3/2),
+    only screen and (min--moz-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5) {
+}
+
+/* iPhone Portrait */
+@media screen and (max-device-width: 480px) and (orientation: portrait) {
+}
+
+/* iPhone Landscape */
+@media screen and (max-device-width: 480px) and (orientation: landscape) {
+}
+
+/* iPad Portrait */
+@media screen and (min-device-width: 481px) and (orientation: portrait) {
+}
+
+/* iPad Landscape */
+@media screen and (min-device-width: 481px) and (orientation: landscape) {
+}

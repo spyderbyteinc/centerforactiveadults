@@ -1,0 +1,13 @@
+
+$.ajax({
+    type: 'POST',
+    url: "../ajax/bidding.php",
+    async: false,
+    dataType: "json",
+    data: {
+        'type': "lot_name",
+        "lot_id": id
+    },
+    success: function (out) {
+    }
+});
