@@ -86,6 +86,7 @@ include "connect.php";
             $("body").css("visibility", "visible");
             $("body").css("overflow-y", "auto");
         }
+
     };
 
     var current = "all_members";

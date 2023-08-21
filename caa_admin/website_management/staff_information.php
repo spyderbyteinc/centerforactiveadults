@@ -447,6 +447,8 @@ for ($i = 0; $i < count($ids); $i++) {
         var email = $("#staff_email_edit").val();
         var image = $("#chosenPicture_edit").val().replace("staff_image_", "");
 
+
+        console.log(image);
          $.ajax({
             type: 'POST',
             url: "ajax.php",
@@ -462,6 +464,7 @@ for ($i = 0; $i < count($ids); $i++) {
             },
             success: function (out) {
                     var image_name = out;
+
                     $("#my_staff_item_" + id + " .my_picture_chooser img").attr("src", "./uploads/" + image_name);
                     $("#my_staff_item_" + id + " .staff_image img").attr("src", "./uploads/" + image_name);
                     $("#my_staff_item_" + id + " .staff_name").text(name);

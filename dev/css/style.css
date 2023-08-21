@@ -59,7 +59,7 @@ h2.section_heading {
     margin-bottom: 30px;
 }
 h2.section_heading span {
-    background: whitesmoke;
+    background: white;
     padding: 0 10px;
     font-size: 26px;
     color: #06acdc;
@@ -810,4 +810,50 @@ ul.er-controls > li:hover {
 }
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
     border-top-color: chocolate !important;
+}
+.image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.image_grouping {
+    position: relative;
+    height: 540px;
+}
+
+.image_grouping svg {
+    font-size: 30px;
+    color: #06acdc;
+    cursor: pointer;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+.image_grouping svg:hover {
+    color: chocolate;
+}
+#center_details {
+    margin-top: 40px;
+}
+#center_details.detail_box {
+    width: auto;
+    border: 5px solid black;
+    padding: 20px;
+    font-size: 18px;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+}
+#center_details.detail_box .details_heading {
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+.image_container {
+    margin: auto;
+}
+.image_container,
+.image_grouping,
+.image_container img {
+    width: 960px;
+    height: 540px;
 }

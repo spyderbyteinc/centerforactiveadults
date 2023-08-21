@@ -2,6 +2,7 @@
 session_start();
 
 $user = $_SESSION['username'];
+$email = $user;
 
 if (!isset($user)) {
     header("location: login.php");
@@ -16,6 +17,10 @@ $page_name = basename($_SERVER['PHP_SELF']);
 
 include "connect.php";
 
+$sql = "SELECT * FROM `admin_users` WHERE `email`='$email'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$name = $row['display_name'];
 ?>
 <head>
     <meta charset="UTF-8">
@@ -26,6 +31,10 @@ include "connect.php";
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="bidzbuttons.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
     <script src="all.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -65,7 +74,7 @@ include "connect.php";
                     <li>
                         <a href="#">
                             <i class="fas fa-user"></i>
-                            <span class="head_link">Welcome, Jordan</span>
+                            <span class="head_link">Welcome, <?php echo $name; ?></span>
                         </a>
                     </li>
                     <li>
@@ -81,7 +90,7 @@ include "connect.php";
         <div id="dashboard_logo">
             <div id="logo_content">
                 <img src="logo.png" alt="CAA Logo" class="logo">
-                <h1>CAA Admin - Jordan Halaby</h1>
+                <h1>CAA Admin - <?php echo $name; ?></h1>
             </div>
         </div>
     </header>
@@ -110,14 +119,14 @@ include "connect.php";
                             <span class="side_link">User Database</span>
                         </a>
                     </li>
-                    <?php if ($page_name == "deposit.php"): ?>
+                    <?php if ($page_name == "daily_deposit_form.php"): ?>
                     <li class="nav active">
                     <?php else: ?>
                     <li class="nav">
                     <?php endif;?>
-                        <a class="navlin" href="deposit.php">
+                        <a class="navlin" href="daily_deposit_form.php">
                             <i class="fa-solid fa-money-bill-transfer" style="color: #ffffff;"></i>
-                            <span class="side_link">Internal Deposit Form</span>
+                            <span class="side_link">Daily Deposit Form</span>
                         </a>
                     </li>
                     <?php if ($page_name == "membershipFees.php"): ?>
@@ -128,6 +137,16 @@ include "connect.php";
                         <a class="navlin" href="membershipFees.php">
                             <i class="fa-solid fa-comments-dollar" style="color: #ffffff;"></i>
                             <span class="side_link">Membership Fees</span>
+                        </a>
+                    </li>
+                    <?php if ($page_name == "duplicates.php"): ?>
+                    <li class="nav active">
+                    <?php else: ?>
+                    <li class="nav">
+                    <?php endif;?>
+                        <a class="navlin" href="duplicates.php">
+                           <i class="fa-regular fa-copy" style="color: #ffffff;"></i>
+                            <span class="side_link">Duplicate Tracker</span>
                         </a>
                     </li>
                     <?php if ($page_name == "websiteManagement.php"): ?>

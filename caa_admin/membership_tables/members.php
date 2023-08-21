@@ -105,6 +105,9 @@ $output = array($all_members_csl, $all_members_lt, $all_members_got, $all_member
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
                         </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
                     </td>
                 </tr>
             `;

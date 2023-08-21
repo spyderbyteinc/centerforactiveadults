@@ -11,6 +11,8 @@ if (isset($_POST['submit'])) {
 
         ## Location
         $location = "uploads/" . $filename;
+        $location2 = "../../uploads/" . $filename;
+        $location3 = "../../dev/uploads/" . $filename;
         $extension = pathinfo($location, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
 
@@ -25,9 +27,20 @@ if (isset($_POST['submit'])) {
 
                 $sql = "INSERT INTO `images` (`id`, `image_name`) VALUES (NULL, '$filename')";
                 $result = mysqli_query($conn, $sql);
+
+                $target = "../uploads/" . $filename;
+                $target2 = "../dev/uploads/" . $filename;
+                copy($location, $target);
+                copy($location, $target2);
+
+                // $target = "../uploads/" . $filename;
+                // if (rename($target, $location)) {
+                //     echo "success";
+                // } else {
+                //     echo "nope";
+                // }
             }
         }
-
     }
 }
 

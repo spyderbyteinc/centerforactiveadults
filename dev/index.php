@@ -20,7 +20,10 @@
 
 <div class="modal_bg" id="popup_slides">
     <div class="image_container">
-        <img src="slides/images/ageless_strength.png" alt="">
+        <div class="image_grouping">
+            <img src="slides/images/ageless_strength.png" alt="">
+            <i class="close_slide fa-solid fa-circle-xmark"></i>
+        </div>
     </div>
 </div>
 
@@ -43,6 +46,11 @@
                 <th class="table_col">Issued Month(s)</th>
                 <th class="table_col">Issued Year</th>
                 <th class="table_col">Link</th>
+            </tr>
+            <tr>
+                <td class="table_col">May, June</td>
+                <td class="table_col">2023</td>
+                <td class="table_col"><a target="_blank" href="http://centerforactiveadults.com/newsletters/CAA Newsletter  May June 2023.pdf">Click Here</a></td>
             </tr>
             <tr>
                 <td class="table_col">March, April</td>
@@ -146,7 +154,7 @@
     <section id="newsletters" class="full">
         <div class="newsletter_col">
             <span class="newsletter current_news">
-                <a type="submit" target="_blank" class="fancy-submit fancy-button bg-gradient1 cursor_pointer" style="margin:auto;" id="create_account_submit" href="http://centerforactiveadults.com/newsletters/CAA Newsletter  May June 2023.pdf"><span><i class="fa-regular fa-folder-open"></i> Current Newsletter</span></a>
+                <a type="submit" target="_blank" class="fancy-submit fancy-button bg-gradient1 cursor_pointer" style="margin:auto;" id="create_account_submit" href="http://centerforactiveadults.com/newsletters/CAA Newsletter July August 2023 Final.pdf"><span><i class="fa-regular fa-folder-open"></i> Current Newsletter</span></a>
             </span>
 
         <span class="newsletter newsarc"><a href="#" class="bidzbutton" id="archive_open"><i class="fa-solid fa-box-archive"></i> NEWSLETTER ARCHIVE</a></span>
@@ -198,8 +206,9 @@
 
     <h2 class="section_heading"><span>Calendars</span></h2>
 
-    <img src="calendar/may2023.png" alt="May 2023" class="calendar_image">
     <img src="calendar/june23.png" alt="June 2023" class="calendar_image">
+    <img src="calendar/july2023.png" alt="July 2023" class="calendar_image">
+    <img src="calendar/august2023.png" alt="August 2023" class="calendar_image">
 
     <h2 class="section_heading"><span>Classes / Workshops</span></h2>
             <div class="class_list_holder">
@@ -216,15 +225,15 @@ while ($col1_row = mysqli_fetch_assoc($col1_result)):
     $id = $col1_row['id'];
     $type = $col1_row['type'];
     ?>
-																																																																																																																																																																																																																                                                                                                                                                    <li class="class_list_item first_list_item" id="col_1||entry_<?php echo $id; ?>">
-																																																																																																																																																																																										                    <div class="hover">
-																																																																																																																																																																																										                        <div class="class_name">
-																																																																																																																																																																																										                            <?php echo $type; ?>
-																																																																																																																																																																																										                        </div>
-																																																																																																																																																																																										                        <div class="choc_bar"></div>
-																																																																																																																																																																																										                    </div>
-																																																																																																																																																																																										                </li>
-																																																																																																																																																																																										            <?php endwhile;?>
+																																																																																																																																																																																																																																			                                                                                                                                                    <li class="class_list_item first_list_item" id="col_1||entry_<?php echo $id; ?>">
+																																																																																																																																																																																																													                    <div class="hover">
+																																																																																																																																																																																																													                        <div class="class_name">
+																																																																																																																																																																																																													                            <?php echo $type; ?>
+																																																																																																																																																																																																													                        </div>
+																																																																																																																																																																																																													                        <div class="choc_bar"></div>
+																																																																																																																																																																																																													                    </div>
+																																																																																																																																																																																																													                </li>
+																																																																																																																																																																																																													            <?php endwhile;?>
             </ul>
         </div>
         <div class="class_column" id="sliding_column_2">
@@ -251,33 +260,19 @@ while ($col1_row = mysqli_fetch_assoc($col1_result)):
                 <p class="mission_box mission_body">"To encourage the art of living well by building a vibrant community of active individuals, 50 & up, through diverse programming and activities."</p>
             </div>
             <div class="non_dis_statement">
-                <p class="statement_heading">Non-Discrimination Statement</p>
-                <p class="statement_body">
-                    The South Lyon Community School District does not discriminate on the basis of race, color, national origin, sex, disability, weight, religion, or marital status in its programs and activities. The following person has been designated to handle inquiries regarding the nondiscrimination policies:
-                </p>
-                <div class="statement_handler">
-                    <h5>Brian Toth</h5>
-                    <p class="handler_details">Assistant Superintendent for Administrative Services</p>
-                    <p class="handler_details">South Lyon Community Schools</p>
-                    <p class="handler_details">345 S. Warren, South Lyon</p>
-                    <p class="handler_details">South Lyon, MI 48178</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="center_details">
-        <div class="detail_box">
+        <div class="detail_box" id="center_details">
             <p class="details_heading">Website for the South Lyon Center for Active Adults</p>
 
             <p class="details_line">Located in SW Corner of South Lyon High School</p>
             <p class="details_line">Corner of Lafayette (Pontiac Trail) and Eleven Mile Rd.</p>
             <p class="details_line"><strong>PHONE NUMBER: 248.573.8175</strong></p>
             <p class="details_line">Office Hours: Monday - Friday, 9:00am - 3:30pm</p>
-            <p class="details_line">Superintendent of Schools, Steven Archibald</p>
             <p class="details_line">Website Launched 6/1/2023</p>
         </div>
+            </div>
+        </div>
     </div>
+
 </div>
 <script src="https://www.jqueryscript.net/demo/Infinite-Scroller-Plugin-jQuery/infiniteslidev2.js"></script>
 <script>
@@ -348,6 +343,9 @@ function toTitleCase(str) {
 </script>
 <script>
     // Handle cable slides
+    $(document).on('click','.close_slide',function(e){
+            $("#popup_slides").css("display", "none");
+    });
     $(document).on('click','#popup_slides .image_container',function(e){
         if (e.target === e.currentTarget) {
             $("#popup_slides").css("display", "none");
@@ -381,7 +379,7 @@ function toTitleCase(str) {
                 console.log(picture);
 
                 if(picture != ""){
-                    $("#popup_slides img").attr("src", "slides/images/" + picture);
+                    $("#popup_slides img").attr("src", "./uploads/" + picture);
                     $("#popup_slides").css("display", "block");
                 }
                 else{

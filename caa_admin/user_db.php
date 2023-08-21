@@ -1,5 +1,10 @@
 <?php
 include "header.php";
+
+include "add_users/member.php";
+include "add_users/noform.php";
+include "add_users/transition.php";
+
 ?>
 
 <?php
@@ -15,6 +20,18 @@ include "connect.php";
         display: none;
     }
 </style>
+<div class="modal_bg" id="confirmDeletion">
+    <div class="modal">
+        <h4>Delete Record: <span id="deleted_user">JORDAN HALABY</span></h4>
+
+        <input type="hidden" name="my_user_dets" id="my_user_dets" value="">
+
+        <div class="delete_button_container">
+            <a href="#" class="bidzbutton red" id="delete_user_record">Delete</a>
+            <a href="#" class="bidzbutton orange" id="cancel_deletion">Cancel</a>
+        </div>
+    </div>
+</div>
 <div class="modal_bg" id="member_details">
     <div class="modal detail_modal">
         <h4>User Details - Complete Member</h4>
@@ -273,14 +290,51 @@ include "connect.php";
             </select>
         </div>
         <div class="line">
+            <a href="#" class="bidzbutton devart" id="do_the_filter"><i class="fa-solid fa-filter"></i>&nbsp; Filter</a>
             <a href="#" class="bidzbutton orange" id="clear_button">Clear</a>
+        </div>
+
+        <div class="dropdown">
+            <input type="checkbox" id="dropdown" />
+            <label for="dropdown" class="dropdown-btn">
+                <span>Add User</span>
+                <div class="dropdown-sep"></div>
+                <span id="addMemberButton">
+                    <i class="fa-solid fa-circle-plus"></i>
+                </span>
+            </label>
+
+            <ul class="dropdown-content" role="menu">
+                <li><a href="#" id="create_new_member">Member</a></li>
+                <li><a href="#" id="create_new_incomplete">Incomplete Member</a></li>
+            </ul>
         </div>
     </div>
 
+    <script>
+        $(document).on('click', ".dropdown", function(event){
+            event.stopPropagation();
+        });
+
+        $(document).on("click", ".dropdown-btn", function(){
+            $(".dropdown-content").css("display", "block");
+            $(".dropdown-content").css("visibility", "visible");
+                $(".dropdown-content").css("transform", "translateY(1px)");
+        });
+        // Closes the menu in the event of outside click
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown')) {
+                $(".dropdown-content").css("display", "none");
+                $(".dropdown-content").css("visibility", "hidden");
+                $(".dropdown-content").css("transform", "translateY(0)");
+            }
+        }
+    </script>
+
     <ul id="nav_tabs">
-            <li class="nav_item active"><a href="#" id="module1" name="all_members" class="nav_link">All Members / Incomplete</a></li>
-            <li class="nav_item"><a href="#" id="module2" name="just_members" class="nav_link">Just Members</a></li>
-            <li class="nav_item"><a href="#" id="module3" name="just_incomplete" class="nav_link">Just Incomplete</a></li>
+            <li class="nav_item active"><a href="#" id="module1" name="all_members" class="nav_link tab_handler">All Members / Incomplete</a></li>
+            <li class="nav_item"><a href="#" id="module2" name="just_members" class="nav_link tab_handler">Master Database</a></li>
+            <li class="nav_item"><a href="#" id="module3" name="just_incomplete" class="nav_link tab_handler">Just Incomplete</a></li>
         </ul>
 
         <?php include 'membership_tables/all.php';?>
@@ -291,6 +345,29 @@ include "connect.php";
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script><script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
 <script>
 
+    function setTransitionIcon(){
+        $(".table_row").each(function(){
+            var table_row = $(this);
+            var membership = table_row.find(".table_col:nth-child(8)").text();
+            var id = table_row.find("input.all_id").val();
+
+            var special_actions = table_row.find(".table_col:nth-child(10)");
+
+            var curr_actions = special_actions.html();
+
+            if(membership == "Incomplete"){
+                var template = `
+                    <a href="#" class="transition_record"  name="transition_${id}" title="Transition User">
+                        <i class="fa-solid fa-shuffle"></i>
+                    </a>
+                `;
+
+                curr_actions = curr_actions + template;
+                special_actions.html(curr_actions);
+
+            }
+        });
+    }
     function getMonthByIndex(index){
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -311,6 +388,9 @@ include "connect.php";
             $("#spinner_holder").css("visibility", "hidden");
             $("body").css("visibility", "visible");
             $("body").css("overflow-y", "auto");
+
+            // add transition icon
+            setTransitionIcon();
         }
     };
 
@@ -467,6 +547,8 @@ include "connect.php";
     function municipality_conversion(abbr){
         var full = "";
 
+        console.log(abbr);
+
         if(abbr == "csl"){
             full = "City of South Lyon";
         }
@@ -525,6 +607,9 @@ include "connect.php";
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
                         </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
                     </td>
                 </tr>
             `;
@@ -564,6 +649,9 @@ include "connect.php";
                         </a>
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
+                        </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
                         </a>
                     </td>
                 </tr>
@@ -611,6 +699,9 @@ include "connect.php";
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
                         </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
                     </td>
                 </tr>
             `;
@@ -657,6 +748,9 @@ include "connect.php";
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
                         </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
                     </td>
                 </tr>
             `;
@@ -670,20 +764,55 @@ include "connect.php";
     $("#clear_button").click(function(e){
         e.preventDefault();
 
+
         $(".table_row").remove();
 
         $("select#municipality_filter").val("");
+        $("#filter").val("");
 
         var users = getAllUsers();
 
-        var all_members = $.merge(users[0], users[1], users[2], users[3]);
-        var all_no_form = $.merge(users[4], users[5], users[6], users[7]);
 
-        printAllRows(all_members, all_no_form);
-        printMemberRows(all_members);
-        printNoFormRows(all_no_form);
+        var csl_member_group = users[0];
+        var lt_member_group = users[1];
+        var got_member_group = users[2];
+        var other_member_group = users[3];
 
+        var csl_noform_group = users[4];
+        var lt_noform_group = users[5];
+        var got_noform_group = users[6];
+        var other_noform_group = users[7];
+
+        var tab = getTabName();
+
+        var tables = ["all_user_table", "all_member_table", "noform_table"];
+
+                var table = tables[0];
+
+                printGroup(csl_member_group, table);
+                printGroup(lt_member_group, table);
+                printGroup(got_member_group, table);
+                printGroup(other_member_group, table);
+
+                printGroup(csl_noform_group, table);
+                printGroup(lt_noform_group, table);
+                printGroup(got_noform_group, table);
+                printGroup(other_noform_group, table);
+
+                var table = tables[1];
+
+                printGroup(csl_member_group, table);
+                printGroup(lt_member_group, table);
+                printGroup(got_member_group, table);
+                printGroup(other_member_group, table);
+
+                var table = tables[2];
+                printGroup(csl_noform_group, table);
+                printGroup(lt_noform_group, table);
+                printGroup(got_noform_group, table);
+                printGroup(other_noform_group, table);
     });
+
 
     function filter_it(vale, table, id_cont){
         var all_ids = [];
@@ -818,10 +947,10 @@ include "connect.php";
         }
         else if(filter == "" && selected != "all" && selected != ""){
             // filter municipality
-            console.log("filter municipality");
 
             $(".table_row").each(function(){
                 var munic = $(this).find(".municipality_selection").text();
+            console.log("filter municipality", munic);
 
                 if(selected == munic){
                     // do nothing
@@ -895,18 +1024,420 @@ include "connect.php";
         }
     }
 
-    // filter text
-    $('#filter').on("input", function() {
-        doTheFilter();
+    function printGroup(group, table_name){
+        var printArr = [];
+
+        var out = "";
+        for(var v = 0; v<group.length; v++){
+            var record = group[v];
+
+            var id = record[0];
+            var last_name = record[1];
+            var first_name = record[2];
+            var spouse = record[3];
+            var address = record[4];
+            var zip = record[5];
+            var home_phone = record[6];
+            var membership = record[7];
+            var municipality = record[8];
+            var table = record[9];
+
+            var template = `
+                <tr class="table_row">
+                    <input type="hidden" name="all_id" class="all_id" value="${id}">
+                    <td class="table_col last_name">${last_name}</td>
+                    <td class="table_col first_name">${first_name}</td>
+                    <td class="table_col">${spouse}</td>
+                    <td class="table_col address">${address}</td>
+                    <td class="table_col">${zip}</td>
+                    <td class="table_col">${home_phone}</td>
+                    <td class="table_col"><strong>${membership}</strong></td>
+                    <td class="table_col municipality_selection">${municipality}</td>
+                    <td class="table_col special_actions">
+                        <a href="#" class="view_record" name="id=${id},table=${table}" title="View Record">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+
+            out = out + template;
+
+        }
+
+        $("#" + table_name).append(out);
+    }
+    function getTabName(){
+        var tabname = $("ul#nav_tabs li.active").find("a").attr('name');
+        return tabname;
+    }
+    function myNewFilter(){
+
+        $("tr.table_row").each(function(){
+            $(this).remove();
+        });
+        var tab = getTabName();
+
+        var users = getAllUsers();
+
+        var csl_member_group = users[0];
+        var lt_member_group = users[1];
+        var got_member_group = users[2];
+        var other_member_group = users[3];
+
+        var csl_noform_group = users[4];
+        var lt_noform_group = users[5];
+        var got_noform_group = users[6];
+        var other_noform_group = users[7];
+
+        var inp = $("#filter").val();
+        var sel = $("#municipality_filter").val();
+
+        var munic_inp = municipality_conversion(sel);
+
+        // output all data based on tab
+        if(tab == "all_members"){
+            var printArr = printGroup(csl_member_group, "all_user_table");
+            console.log(printArr);
+        }
+        else if(tab == "just_members"){
+
+        }
+        else if(tab == "just_incomplete"){
+
+        }
+
+        // console.log(users);
+    }
+
+    function jordanFilter(){
+
+        $("tr.table_row").each(function(){
+            $(this).remove();
+        });
+
+        var users = getAllUsers();
+
+        var csl_member_group = users[0];
+        var lt_member_group = users[1];
+        var got_member_group = users[2];
+        var other_member_group = users[3];
+
+        var csl_noform_group = users[4];
+        var lt_noform_group = users[5];
+        var got_noform_group = users[6];
+        var other_noform_group = users[7];
+
+        var tab = getTabName();
+
+        var inp = $("#filter").val().toLowerCase();
+        var sel = $("#municipality_filter").val();
+
+        var munic_inp = municipality_conversion(sel);
+
+        console.log(munic_inp);
+
+        var tables = ["all_user_table", "all_member_table", "noform_table"];
+
+        if(tab == "all_members"){
+            for(var t = 0; t<tables.length; t++){
+                var table = tables[t];
+
+                if(munic_inp == "all"){
+                    printGroup(csl_member_group, table);
+                    printGroup(lt_member_group, table);
+                    printGroup(got_member_group, table);
+                    printGroup(other_member_group, table);
+
+                    printGroup(csl_noform_group, table);
+                    printGroup(lt_noform_group, table);
+                    printGroup(got_noform_group, table);
+                    printGroup(other_noform_group, table);
+                }
+                else if(munic_inp == "City of South Lyon"){
+                    printGroup(csl_member_group, table);
+                    printGroup(csl_noform_group, table);
+                }
+                else if(munic_inp == "Green Oak Township"){
+                    printGroup(got_member_group, table);
+                    printGroup(got_noform_group, table);
+                }
+                else if(munic_inp == "Lyon Township"){
+                    printGroup(lt_member_group, table);
+                    printGroup(lt_noform_group, table);
+                }
+                else if(munic_inp == "Other"){
+                    var other_member_output = [];
+                    var other_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_member_output.push(record);
+                        }
+                    }
+
+                    for(var om = 0; om<other_noform_output.length; om++){
+                        var record = other_noform_output[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(other_member_output, table);
+                    printGroup(other_noform_output, table);
+                }
+                else if(munic_inp == "na"){
+                    var na_member_output = [];
+                    var na_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_member_output.push(record);
+                        }
+                    }
 
 
+                    for(var om = 0; om<other_noform_group.length; om++){
+                        var record = other_noform_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(na_member_output, table);
+                    printGroup(na_noform_output, table);
+
+                }
+            }
+        }
+        else if(tab == "just_members"){
+
+            for(var t = 0; t<tables.length; t++){
+                var table = tables[t];
+
+                if(munic_inp == "all"){
+                    printGroup(csl_member_group, table);
+                    printGroup(lt_member_group, table);
+                    printGroup(got_member_group, table);
+                    printGroup(other_member_group, table);
+                }
+                else if(munic_inp == "City of South Lyon"){
+                    printGroup(csl_member_group, table);
+                }
+                else if(munic_inp == "Green Oak Township"){
+                    printGroup(got_member_group, table);
+                }
+                else if(munic_inp == "Lyon Township"){
+                    printGroup(lt_member_group, table);
+                }
+                else if(munic_inp == "Other"){
+                    var other_member_output = [];
+                    var other_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_member_output.push(record);
+                        }
+                    }
+
+                    for(var om = 0; om<other_noform_output.length; om++){
+                        var record = other_noform_output[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(other_member_output, table);
+                }
+                else if(munic_inp == "na"){
+                    var na_member_output = [];
+                    var na_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_member_output.push(record);
+                        }
+                    }
+
+
+                    for(var om = 0; om<other_noform_group.length; om++){
+                        var record = other_noform_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(na_member_output, table);
+
+                }
+            }
+        }
+        else if(tab == "just_incomplete"){
+
+            for(var t = 0; t<tables.length; t++){
+                var table = tables[t];
+
+                if(munic_inp == "all"){
+                    printGroup(csl_noform_group, table);
+                    printGroup(lt_noform_group, table);
+                    printGroup(got_noform_group, table);
+                    printGroup(other_noform_group, table);
+                }
+                else if(munic_inp == "City of South Lyon"){
+                    printGroup(csl_noform_group, table);
+                }
+                else if(munic_inp == "Green Oak Township"){
+                    printGroup(got_noform_group, table);
+                }
+                else if(munic_inp == "Lyon Township"){
+                    printGroup(lt_noform_group, table);
+                }
+                else if(munic_inp == "Other"){
+                    var other_member_output = [];
+                    var other_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_member_output.push(record);
+                        }
+                    }
+
+                    for(var om = 0; om<other_noform_output.length; om++){
+                        var record = other_noform_output[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            other_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(other_noform_output, table);
+                }
+                else if(munic_inp == "na"){
+                    var na_member_output = [];
+                    var na_noform_output = [];
+
+                    for(var om = 0; om<other_member_group.length; om++){
+                        var record = other_member_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_member_output.push(record);
+                        }
+                    }
+
+
+                    for(var om = 0; om<other_noform_group.length; om++){
+                        var record = other_noform_group[om];
+
+                        var municipality = record[8];
+
+                        if(municipality == "Other"){
+                            // do nothing
+                        }
+                        else{
+                            na_noform_output.push(record);
+                        }
+                    }
+
+                    printGroup(na_noform_output, table);
+
+                }
+            }
+        }
+
+        $(".table_row").each(function(){
+            var last_name = $(this).find(".last_name").text().toLowerCase();
+            var first_name = $(this).find(".first_name").text().toLowerCase();
+
+            if(last_name.includes(inp) || first_name.includes(inp)){
+                // do nothing
+            }
+            else{
+                $(this).remove();
+            }
+        })
+
+
+        setTransitionIcon();
+    }
+
+    $(document).on("click", "#do_the_filter", function(e){
+        jordanFilter();
     });
 
-    // select municipality filter
-    $('select#municipality_filter').on('change', function() {
-        doTheFilter();
+    // filter text
+    // $('#filter').on("input", function() {
+    //     jordanFilter();
 
 
+    // });
+
+    // // select municipality filter
+    // $('select#municipality_filter').on('change', function() {
+    //     jordanFilter();
+
+
+    // });
+
+    // change tab
+    $(document).on("click", ".tab_handler", function(){
+        jordanFilter();
     });
 
     $(document).on('click','#close_noform',function(e){
@@ -958,6 +1489,8 @@ include "connect.php";
 
                     var nf_cols = ['id', 'last_name', 'first_name', 'first_visit_main', 'spouse', 'first_visit_spouse', 'address', 'city', 'state', 'zip', 'home_phone', 'municipality'];
 
+                    console.log('jordan', nf_cols);
+
                     // var id = out['id'];
                     // var last_name = out['last_name'];
                     // var first_name = out['first_name'];
@@ -984,7 +1517,6 @@ include "connect.php";
                             data = getMonthByIndex(temp.getMonth()) + " " + temp.getFullYear();
                         }
 
-
                         var output_field = "#nf_" + col;
 
                         $(output_field).text(data);
@@ -1009,7 +1541,7 @@ include "connect.php";
                         }
 
 
-                        console.log(data, typeof data);
+                        // console.log(data, typeof data);
 
                         var output_field = "#mem_" + col;
 
@@ -1029,4 +1561,112 @@ include "connect.php";
     var nform_fields = ['nf_last_name', 'nf_first_name', 'nf_spouse', 'nf_first_visit_main', 'nf_first_visit_spouse', 'nf_home_phone', 'nf_address', 'nf_city', 'nf_zip', 'nf_municipality'];
 
     var member_fields = ['mem_last_name', 'mem_first_name', 'mem_spouse', 'mem_last_visit_main', 'mem_last_visit_spouse', 'mem_key_tag', 'mem_address', 'mem_city', 'mem_zip', 'mem_municipality', 'mem_home_phone', 'mem_email', 'mem_newsletter', 'mem_emergency_contact_1', 'mem_emergency_phone_1', 'mem_emergency_contact_2', 'mem_emergency_phone_2', 'mem_number_in_home', 'mem_head_of_household', 'mem_race', 'mem_62_older', 'mem_membership_date', 'mem_member_fee_paid_notes'];
+</script>
+<script>
+    $(document).on("click", ".cancel_member_add", function(){
+        $("#add_noform").css("display", "none");
+        $("#add_member").css("display", "none");
+    });
+    $(document).on("click", "#create_new_member", function(){
+        $("#add_member").css("display", "block");
+    });
+    $(document).on("click", "#create_new_incomplete", function(){
+        $("#add_noform").css("display", "block");
+    });
+
+    $(document).on("click", ".delete_record", function(){
+        $("#confirmDeletion").css("display", "block");
+
+        var data = $(this).closest(".table_row");
+        var first_name = data.find(".first_name").text();
+        var last_name = data.find(".last_name").text();
+
+        var full_name = first_name + " " + last_name;
+
+        $("#deleted_user").text(full_name);
+
+        var name = $(this).attr('name');
+        $("#my_user_dets").val(name);
+    });
+    $(document).on("click", "#cancel_deletion", function(){
+        $("#confirmDeletion").css("display", "none");
+    })
+    $(document).on('click', '#delete_user_record', function(){
+        var dets = $("#my_user_dets").val();
+        var comps = dets.split(",");
+
+        var ids = comps[0];
+        var tables = comps[1];
+
+        var id_comps = ids.split('=');
+        var table_comps = tables.split("=");
+
+        var id = id_comps[1];
+        var table = table_comps[1];
+
+        var full_name = $("#deleted_user").text();
+
+         $.ajax({
+            type: 'POST',
+            url: "ajax.php",
+            async: false,
+            dataType: "json",
+            data: {
+                'type': 'delete_user_record',
+                'id': id,
+                'table': table
+            },
+            success: function (out) {
+                alert(full_name + " has been deleted");
+
+                location.reload();
+            }
+        });
+    })
+
+    $(document).on("click", ".transition_record", function(e){
+        e.preventDefault();
+
+        var name = $(this).attr("name");
+        var id = name.replace("transition_", "");
+
+    var cols = ['first_name', 'last_name', 'spouse', 'first_visit_main', 'first_visit_spouse', 'address', 'city', 'state', 'municipality', 'zip', 'home_phone'];
+
+    var input = ['last_name', 'first_name', 'key_tag', 'last_visit_main', 'spouse', 'last_visit_spouse', 'address', 'city', 'state', 'zip', 'home_phone', 'municipality', 'email', 'newsletter', 'emergency_contact_1', 'emergency_phone_1', 'emergency_contact_2', 'emergency_phone_2', 'number_in_home', 'head_of_household', 'race', '62_older', 'membership_date', 'member_fee_paid_notes'];
+
+         $.ajax({
+            type: 'POST',
+            url: "ajax.php",
+            async: false,
+            dataType: "json",
+            data: {
+                'type': 'get_noform_data',
+                'id': id,
+                'cols': cols
+            },
+            success: function (out) {
+                console.log(out);
+
+                $("#tr_old_id").val(id);
+                var name = out['first_name'] + " " + out['last_name'];
+
+                $("#transition_name").text(name);
+                $("#transition_member_modal").css("display", "block");
+
+                for(var c =0; c<cols.length; c++){
+                    var col = cols[c];
+
+                    var v = out[col];
+
+                    if(v != ""){
+                        if(input.includes(col)){
+                            // col, v
+                            var selector = "#tr_" + col;
+                            $(selector).val(v);
+                        }
+                    }
+                }
+            }
+        });
+    })
 </script>

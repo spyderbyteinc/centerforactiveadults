@@ -1,5 +1,53 @@
 <?php
 
+include "connect.php";
+function mysort($arr)
+{
+    $all_members_csl = $arr[0];
+    $all_members_lt = $arr[1];
+    $all_members_got = $arr[2];
+    $all_members_other = $arr[3];
+
+    $no_forms_csl = $arr[4];
+    $no_forms_lt = $arr[5];
+    $no_forms_got = $arr[6];
+    $no_forms_other = $arr[7];
+
+    $all_members_csl = sort_arr($all_members_csl);
+    $all_members_lt = sort_arr($all_members_lt);
+    $all_members_got = sort_arr($all_members_got);
+    $all_members_other = sort_arr($all_members_other);
+
+    $no_forms_csl = sort_arr($no_forms_csl);
+    $no_forms_lt = sort_arr($no_forms_lt);
+    $no_forms_got = sort_arr($no_forms_got);
+    $no_forms_other = sort_arr($no_forms_other);
+
+    $output = array($all_members_csl, $all_members_lt, $all_members_got, $all_members_other, $no_forms_csl, $no_forms_lt, $no_forms_got, $no_forms_other);
+
+    return $output;
+}
+
+function sort_arr($group)
+{
+    for ($i = 0; $i < count($group); $i++) {
+
+        $min_idx = $i;
+
+        for ($j = $i + 1; $j < count($group); $j++) {
+            if (strcmp($group[$j][1], $group[$min_idx][1]) < 0) {
+                $min_idx = $j;
+            }
+        }
+
+        $temp = $group[$min_idx];
+        $group[$min_idx] = $group[$i];
+        $group[$i] = $temp;
+    }
+
+    return $group;
+}
+
 $key_sql = "SELECT * FROM `pkey`";
 $key_result = mysqli_query($conn, $key_sql);
 
@@ -104,6 +152,7 @@ for ($m = 0; $m < count($all_no_forms); $m++) {
 
 $output = array($all_members_csl, $all_members_lt, $all_members_got, $all_members_other, $no_forms_csl, $no_forms_lt, $no_forms_got, $no_forms_other);
 
+$output = mysort($output);
 ?>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <div id="all_membership">
@@ -171,6 +220,9 @@ $output = array($all_members_csl, $all_members_lt, $all_members_got, $all_member
                         </a>
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
+                        </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
                         </a>
                     </td>
                 </tr>

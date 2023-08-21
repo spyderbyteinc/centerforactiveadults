@@ -109,6 +109,9 @@ $output = array($no_forms_csl, $no_forms_lt, $no_forms_got, $no_forms_other);
                         <a href="#" class="view_map"  name="id=${id},table=${table}" title="View Map">
                             <i class="fa-solid fa-earth-americas"></i>
                         </a>
+                        <a href="#" class="delete_record"  name="id=${id},table=${table}" title="Delete User">
+                           <i class="fa-solid fa-trash-can"></i>
+                        </a>
                     </td>
                 </tr>
             `;

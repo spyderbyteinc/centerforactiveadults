@@ -24,6 +24,9 @@
     #popup_slides .image_container {
         margin: auto;
     }
+    .section_heading span {
+        font-size: 16px !important;
+    }
 }
 
 @media all and (min-width: 480px) and (max-width: 768px) {
@@ -31,6 +34,9 @@
         width: 87%;
         padding: 3%;
         margin: 3%;
+    }
+    .section_heading span {
+        font-size: 16px !important;
     }
     #heading .heading_container #serving_col .box_container {
         width: 360px;
@@ -79,6 +85,9 @@
     .header_col {
         display: block !important;
         width: 100% !important;
+    }
+    .section_heading span {
+        font-size: 16px !important;
     }
     .box_container {
         width: 90% !important;
@@ -156,10 +165,7 @@
 }
 
 /* Retina */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (-o-min-device-pixel-ratio: 3/2),
-    only screen and (min--moz-device-pixel-ratio: 1.5),
-    only screen and (min-device-pixel-ratio: 1.5) {
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
 }
 
 /* iPhone Portrait */
