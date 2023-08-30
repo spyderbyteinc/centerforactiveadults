@@ -1,0 +1,71 @@
+
+            var tree = {
+                "memberships": {
+                    "cash": ['membership_fee_cash', 'fob_replacement_cash'],
+                    "check": ['membership_fee_check', 'fob_replacement_check'],
+                    "wallet": ['membership_fee_wallet', 'fob_replacement_wallet'],
+                    "ticket": ['membership_fee_ticket', 'fob_replacement_ticket'],
+
+                    "totals": ['membership_cash_total', 'membership_check_total', "membership_wallet_total", "membership_ticket_total"],
+                    "grand_total": "membership_total",
+                    "class_ids": ["?", "?"]
+                },
+                "travel_fees": {
+                    "totals" : ['travel_fees_cash', 'travel_fees_check', "travel_fees_wallet", 'travel_fees_ticket'],
+                    "grand_total": "travel_fees_total",
+                    "class_ids": ["?"]
+                },
+                "class_fees": {
+                    "cash": ['ageless_strength_cash', 'anyone_can_paint_cash', 'card_making_cash', 'drawing_with_lori_cash', 'exercise_with_carol_cash', 'fitness_with_gail_cash', 'line_dancing_cash', 'pilates_cash', 'wallet_cash','watercolor_cash', 'yoga_cash', 'knit_crochet_cash'],
+
+                    "check": ['ageless_strength_check', 'anyone_can_paint_check', 'card_making_check', 'drawing_with_lori_check', 'exercise_with_carol_check', 'fitness_with_gail_check', 'line_dancing_check', 'pilates_check', 'wallet_check','watercolor_check', 'yoga_check, "knit_crochet_check'],
+
+                    "wallet": ['ageless_strength_wallet', 'anyone_can_paint_wallet', 'card_making_wallet', 'drawing_with_lori_wallet', 'exercise_with_carol_wallet', 'fitness_with_gail_wallet', 'line_dancing_wallet', 'pilates_wallet', 'wallet_wallet','watercolor_wallet', 'yoga_wallet', 'knit_crochet_wallet'],
+
+                    "ticket": ['ageless_strength_ticket', 'anyone_can_paint_ticket', 'card_making_ticket', 'drawing_with_lori_ticket', 'exercise_with_carol_ticket', 'fitness_with_gail_ticket', 'line_dancing_ticket', 'pilates_ticket', 'ticket_ticket','watercolor_ticket', 'yoga_ticket', 'knit_crochet_ticket'],
+
+                    "totals": ['class_fees_cash_total', 'class_fees_check_total', 'class_fees_wallet_total', 'class_fees_ticket_total'],
+                    "grand_total": 'class_fees_total',
+                    "class_ids": [14, 23, "?", "?", 16, 15, 17, 13, 28, 24, "1-12", 25]
+                },
+                "swimming":{
+                    "totals": ['swimming_cash', 'swimming_check', 'swimming_wallet', 'swimming_ticket'],
+                    "grand_total": "swim_total",
+                    "class_ids": [18]
+                },
+                "fund_raising":{
+                    "cash": ['closet_cash', 'coffee_cash', 'events_cash', 'kroger_cash', 'quick_lunch_cash', 'sponsorship_cash', 'water_cash', 'library_cash'],
+                    "check":['closet_check', 'coffee_check', 'events_check', 'kroger_check', 'quick_lunch_check', 'sponsorship_check', 'water_check', 'library_check'],
+
+                    "wallet": ['closet_wallet', 'coffee_wallet', 'events_wallet', 'kroger_wallet', 'quick_lunch_wallet', 'sponsorship_wallet', 'water_wallet', 'library_wallet'],
+
+                    "ticket": ['closet_ticket', 'coffee_ticket', 'events_ticket', 'kroger_ticket', 'quick_lunch_ticket', 'sponsorship_ticket', 'water_ticket', 'library_ticket'],
+                    "totals": ['fund_raising_cash_total', 'fund_raising_check_total', 'fund_raising_wallet_total','fund_raising_ticket_total'],
+                    'grand_total': 'fund_raising_total',
+                    "class_ids": [29, 29, "?", "?", 26, "?", 29, 30]
+                },
+                "donations":{
+                    "cash": ['aarp_cash', 'angels_cash', 'medical_loan_cash', 'miscellaneous_cash'],
+                    "check": ['aarp_check', 'angels_check', 'medical_loan_check', 'miscellaneous_check'],
+                       "wallet": ['aarp_wallet', 'angels_wallet', 'medical_loan_wallet', 'miscellaneous_wallet'],
+
+                    "ticket": ['aarp_ticket', 'angels_ticket', 'medical_loan_ticket', 'miscellaneous_ticket'],
+                    "totals":['donation_total_cash', 'donation_total_check', 'donation_total_wallet', 'donation_total_ticket'],
+                    "grand_total": 'donation_total',
+                    "class_ids": ["?", 27, 34, "31-33"]
+                },
+                "court_fees":{
+                    "totals": ['court_fees_cash', 'court_fees_check', 'court_fees_wallet', 'court_fees_ticket'],
+                    "grand_total": "court_fees_total",
+                    "class_ids": ["19-22"]
+                },
+                "other":{
+                    "totals": ['other_cash', 'other_check', 'other_wallet', 'other_ticket'],
+                    "grand_total": "other_total",
+                    "class_ids": ["31-33"]
+                },
+                "totals":{
+                    'totals': ['cash_total', 'check_total', 'wallet_total', 'ticket_total'],
+                    'grand_total': 'grand_total'
+                }
+            };

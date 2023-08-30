@@ -256,7 +256,9 @@ tr.main_group {
 }
 #deposit_table .table_row td:nth-child(3),
 #deposit_table .table_row td:nth-child(4),
-#deposit_table .table_row td:nth-child(5) {
+#deposit_table .table_row td:nth-child(5),
+#deposit_table .table_row td:nth-child(6),
+#deposit_table .table_row td:nth-child(7) {
     text-align: center;
 }
 #deposit_table tr th.special_col {
@@ -1976,7 +1978,8 @@ ul#days_of_the_week {
     width: 100%;
     text-align: center;
 }
-#button_container a#generate_deposit {
+#button_container a#generate_deposit,
+#button_container a#deposit_history {
     margin: 0;
     font-size: 16px;
     margin-top: 25px;
@@ -2214,4 +2217,35 @@ h3.table_heading span {
     width: 100%;
     height: 150px;
     padding: 15px;
+}
+#daily_deposit_form_container #button_container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+#viewDepositHistory h2 {
+    margin-top: 15px;
+}
+#viewDepositHistory .history_labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -15px;
+}
+#viewDepositHistory span.history_label {
+    font-weight: bold;
+    font-size: 20px;
+    color: chocolate;
+}
+hr.blue {
+    background-color: #06acdc;
+}
+.table_sticky_container {
+    height: 450px;
+    overflow: auto;
+    margin-top: -35px;
+}
+.table_sticky_container th {
+    position: sticky;
+    top: 0;
 }

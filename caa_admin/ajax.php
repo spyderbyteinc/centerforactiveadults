@@ -605,4 +605,51 @@ if ($type == "map") {
 
     echo json_encode($out);
     exit();
+} else if ($type == "pkey_grabber") {
+    $id = $_POST['id'];
+    $membership = $_POST['membership'];
+
+    $sql = "SELECT * FROM `pkey` WHERE `membership`='$membership' AND `fkey`=$id";
+    $result = mysqli_query($conn, $sql);
+
+    $row = mysqli_fetch_assoc($result);
+
+    $key = $row['id'];
+
+    $out = $key . "--" . $membership . "--" . $id;
+
+    echo json_encode($out);
+    exit();
+} else if ($type == "create_deposit_record") {
+    $mydate = $_POST['mydate'];
+    $class_id = $_POST['class_id'];
+    $class_instructor = $_POST['class_instructor'];
+    $class_cost = $_POST['class_cost'];
+    $user_pkey = $_POST['user_pkey'];
+    $payment_type = $_POST['payment_type'];
+    $special_information = $_POST['special_information'];
+
+    $sql = "INSERT INTO `deposit_record` (`id`, `record_date`, `class_id`, `class_instructor`, `class_cost`, `user_pkey`, `payment_type`, `special_information`) VALUES (NULL, '$mydate', '$class_id', '$class_instructor', '$class_cost', '$user_pkey', '$payment_type', '$special_information');";
+
+    mysqli_query($conn, $sql);
+    echo json_encode($sql);
+    exit();
+} else if ($type == "update_table_arr") {
+    $the_date = $_POST['the_date'];
+
+    $all_data = array();
+    $sql = "SELECT * FROM `deposit_record` WHERE `record_date`='$the_date';";
+    $result = mysqli_query($conn, $sql);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $class_id = $row['class_id'];
+        $class_cost = $row['class_cost'];
+        $payment_type = $row['payment_type'];
+
+        $record = array($class_id, $class_cost, $payment_type);
+
+        array_push($all_data, $record);
+    }
+
+    echo json_encode($all_data);
+    exit();
 }

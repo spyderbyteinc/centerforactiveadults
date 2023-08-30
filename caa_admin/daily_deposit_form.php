@@ -36,10 +36,12 @@ echo "var all_records = " . $js_array . ";";
 ?>
 
 function reset_modals(){
-    $("#chosen_user_display").text("");
+    // $("#chosen_user_display").text("");
     $(".option_mark").each(function(){
         $(this).addClass("empty");
     });
+    $("#special_type_text").val("");
+    $("body").css("overflow", "initial");
 }
 
 $(document).on("click", ".option", function(){
@@ -62,12 +64,19 @@ function setup_rows(){
         var municipality = record[3];
         var membership = record[4];
 
+        var membership_orig = membership;
+
         if(membership == "members"){
             membership = "Member";
+            membership_orig = "member";
         }
         else if(membership == "no_forms"){
             membership = "Incomplete";
+            membership_orig = "no_forms";
         }
+
+        // get pkey from membership and id
+
             var template = `
                 <tr class="table_row search_row" id="${membership}_row_${id}">
                     <td class="table_col last_name">${last_name}</td>
@@ -85,6 +94,7 @@ function setup_rows(){
 }
 $(document).ready(function(){
     setup_rows();
+
 
 
     function getMonthByIndex(index){
@@ -112,6 +122,28 @@ $(document).ready(function(){
         $("#chosen_user_display").text(out);
 
         $("#chooseMemberModal").css("display", "none");
+
+        var membership_orig;
+        if(membership == "Member"){
+            membership_orig = "member";
+        }
+        else if(membership == "Incomplete"){
+            membership_orig = "no_forms";
+        }
+         $.ajax({
+            type: 'POST',
+            url: "ajax.php",
+            async: false,
+            dataType: "json",
+            data: {
+                'type': 'pkey_grabber',
+                'membership': membership_orig,
+                'id': id
+            },
+            success: function (out) {
+                $("#chosen_user_id").val(out);
+            }
+        });
     })
 
     $(document).on("click", ".show_details_button", function(e){
@@ -426,18 +458,20 @@ $(document).ready(function(){
         <div class="class_description_holder" id="class_type_holder">Class Type</div>
         <div class="class_description_holder" id="class_instructor_holder">Class Instructor</div>
 
+        <input type="hidden" name="class_holder" id="class_holder"
+        >
         <div id="class_cost_holder">
             <label for="class_cost">Class Cost</label>
             <input type="number" class="input_text" id="class_cost" placeholder="0">
         </div>
 
         <h3 class="table_heading"><span>Choose a User</span></h3>
-        <div id="choose_user_container">
+        <!-- <div id="choose_user_container">
 
             <span class="click_here">Click Here</span>
-        </div>
-        <h5 id="chosen_user_display"></h5>
-        <input type="hidden" id="chosen_user_id">
+        </div> -->
+        <h5 id="chosen_user_display">N/A</h5>
+        <input type="hidden" id="chosen_user_id" name="chosen_user_id" value="N/A">
 
         <h3 class="table_heading"><span>Payment Type</span></h3>
         <div id="payment_type_container">
@@ -570,8 +604,154 @@ $(document).ready(function(){
     }
 
     $(document).ready(function() {
+
+
+        let USDollar = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+        });
+        var start_date = $("#currentDate").text();
+
+        updateTable(start_date);
+
+        function resetTable(){
+            $(".my_deposit_grabber").each(function(){
+                $(this).find(".cash_option").text("$0.00").css("font-weight", "normal");
+                $(this).find(".check_option").text("$0.00").css("font-weight", "normal");
+                $(this).find(".wallet_option").text("$0.00").css("font-weight", "normal");
+                $(this).find(".ticket_option").text("$0.00").css("font-weight", "normal");
+
+            })
+        }
+
+
+        function updateTable(the_date){
+            console.log(the_date)
+            resetTable();
+
+            var data = [];
+            $.ajax({
+                type: 'POST',
+                url: "ajax.php",
+                async: false,
+                dataType: "json",
+                data: {
+                    'type': 'update_table_arr',
+                    'the_date': the_date
+                },
+                success: function (out) {
+                    data = out;
+                }
+            });
+
+            console.log(data);
+            for(var d =0; d<data.length; d++){
+                var record = data[d];
+
+                var id = record[0];
+                var cost = record[1];
+                var payment_type = record[2];
+
+                var currValue = $("#deposit_row_" + id).find("." + payment_type).text();
+                currValue = parseFloat(currValue.replace("$", ""));
+
+                var newValue = parseFloat(currValue) + parseFloat(cost);
+                $("#deposit_row_" + id).find("." + payment_type).text(newValue);
+            }
+
+            $(".my_deposit_grabber").each(function(){
+                var cash = $(this).find(".cash_option").text();
+                cash = cash.replace("$", "");
+                var out = USDollar.format(cash);
+                $(this).find(".cash_option").text(out);
+                if(cash != 0){
+                    $(this).find(".cash_option").css("font-weight", "bold");
+                }
+
+                var check = $(this).find(".check_option").text();
+                check = check.replace("$", "");
+                var out = USDollar.format(check);
+                $(this).find(".check_option").text(out);
+                if(check != 0){
+                    $(this).find(".check_option").css("font-weight", "bold");
+                }
+
+                var wallet = $(this).find(".wallet_option").text();
+                wallet = wallet.replace("$", "");
+                var out = USDollar.format(wallet);
+                $(this).find(".wallet_option").text(out);
+                if(wallet != 0){
+                    $(this).find(".wallet_option").css("font-weight", "bold");
+                }
+
+                var ticket = $(this).find(".ticket_option").text();
+                ticket = ticket.replace("$", "");
+                var out = USDollar.format(ticket);
+                $(this).find(".ticket_option").text(out);
+                if(ticket != 0){
+                    $(this).find(".ticket_option").css("font-weight", "bold");
+                }
+            });
+        }
+
+
+    $(document).on("click", "li.day_picker button", function(){
+        $("li.day_picker button").each(function(){
+            $(this).css("color", "black");
+            $(this).css("border", "2px solid whitesmoke");
+        });
+
+        $(this).css("color", "chocolate");
+        $(this).css("border", "2px solid #06acdc");
+
+        var button_date = $(this).attr("id");
+        $("#currentDate").html(button_date);
+
+        updateTable(button_date);
+    });
+
+        $(document).on("click", "#save_record_button", function(e){
+            e.preventDefault();
+            // reset_modals();
+            $("body").css("overflow", "initial");
+
+            var class_id = $("#class_holder").val();
+            var class_cost = $("#class_cost").val();
+            var chosen_user = $("#chosen_user_id").val();
+            var payment_type = $("#payment_type").val();
+            var special_notes = $("#special_type_text").val();
+            var mydate = $("#currentDate").text();
+            var class_instructor = $("#class_instructor_holder").text();
+
+            if(!class_id || !class_cost || !chosen_user || !payment_type){
+                alert("Please complete the form");
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "ajax.php",
+                async: false,
+                dataType: "json",
+                data: {
+                    'type': 'create_deposit_record',
+                    'mydate': mydate,
+                    'class_id': class_id,
+                    'class_instructor': class_instructor,
+                    'class_cost': class_cost,
+                    'user_pkey': chosen_user,
+                    'payment_type': payment_type,
+                    'special_information': special_notes
+                },
+                success: function (out) {
+
+                    updateTable(mydate);
+                    $("#addRecordModal").css("display", "none");
+                }
+            });
+        });
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            var last_deposit = new Date("2023-08-09");
+            var last_deposit = new Date("2023-08-24");
             var today = new Date(Date.now());
 
             var date_diff = getDatesInRange(last_deposit, today);
@@ -658,6 +838,8 @@ $(document).ready(function(){
             $("li.day_picker:last button").css("color", "chocolate");
             $("li.day_picker:last button").css("border", "2px solid #06acdc");
             $("#currentDate").html(cdate);
+
+            updateTable(cdate);
     })
 
 </script>
@@ -668,6 +850,7 @@ $(document).ready(function(){
 
         <div id="button_container">
             <a href="#" class="bidzbutton devart" id="generate_deposit">Generate Deposit</a>
+            <a href="#" class="bidzbutton orange" id="deposit_history">Deposit History</a>
         </div>
 
         <div id="most_recent_deposit">4/5/6</div>
@@ -702,14 +885,14 @@ while ($class_row = mysqli_fetch_assoc($class_result)) {
     $class_type = $class_row['class_type'];
     $class_instructor = $class_row['instructor'];
     ?>
-    <tr class="table_row">
+    <tr class="table_row my_deposit_grabber" id="deposit_row_<?php echo $id; ?>">
         <td class="table_col"><?php echo $class_name; ?></td>
         <td class="table_col"><?php echo $class_type; ?></td>
         <td class="table_col"><?php echo $class_instructor; ?></td>
-        <td class="table_col">$0.00</td>
-        <td class="table_col">$0.00</td>
-        <td class="table_col">$0.00</td>
-        <td class="table_col">$0.00</td>
+        <td class="table_col cash_option">0.00</td>
+        <td class="table_col check_option">0.00</td>
+        <td class="table_col wallet_option">0.00</td>
+        <td class="table_col ticket_option">0.00</td>
         <td class="table_col special_col"><a href="#" class="bidzbutton xbox add_record" id="classId_<?php echo $id; ?>_addRecord"><i class="fa-solid fa-user-plus"></i>&nbsp;Add Record</a></td>
         <td class="table_col special_col"><a href="#" class="bidzbutton orange view_history" id="classId<?php echo $id; ?>_viewHistory"><i class="fa-solid fa-eye"></i>&nbsp;View History</a></td>
     </tr>
@@ -726,18 +909,6 @@ while ($class_row = mysqli_fetch_assoc($class_result)) {
 
 
 <script>
-    $(document).on("click", "li.day_picker button", function(){
-        $("li.day_picker button").each(function(){
-            $(this).css("color", "black");
-            $(this).css("border", "2px solid whitesmoke");
-        });
-
-        $(this).css("color", "chocolate");
-        $(this).css("border", "2px solid #06acdc");
-
-        var button_date = $(this).attr("id");
-        $("#currentDate").html(button_date);
-    });
 
     $(document).on("click", "#cancel_choose_member", function(){
         $("#chooseMemberModal").css("display", "none");
@@ -745,6 +916,7 @@ while ($class_row = mysqli_fetch_assoc($class_result)) {
     $(document).on("click", "#cancel_record_creation", function(){
         reset_modals();
         $("#addRecordModal").css("display", "none");
+        $("body").css("overflow", "initial");
     });
 
     $(document).on("click", ".add_record", function(e){
@@ -776,11 +948,15 @@ while ($class_row = mysqli_fetch_assoc($class_result)) {
                 $("#class_type_holder").text(class_type);
                 $("#class_instructor_holder").text(class_instructor);
 
+                $("#class_holder").val(class_id);
+
                 $("#class_cost").val(class_cost);
             }
         });
 
         $("#addRecordModal").css("display", "block");
+        $("#addRecordModal .modal").scrollTop(0);
+        $("body").css("overflow", "hidden");
     });
     $(document).on("click", "#choose_user_container", function(){
         $("#chooseMemberModal").css("display", "block");
@@ -916,10 +1092,41 @@ while ($class_row = mysqli_fetch_assoc($class_result)) {
         $("#showUserDetails").css("display", "none");
     });
 
-    $(document).on("click", "#save_record_button", function(e){
-        e.preventDefault();
-        reset_modals();
+    $(document).ready(function(){
+        $(document).on("click", "#generate_deposit", function(e){
+            e.preventDefault();
 
-        alert("ready to go!");
-    });
+            var my_dates = [];
+
+            $("li.day_picker button").each(function(){
+                var dte = $(this).attr("id");
+                my_dates.push(dte);
+            })
+
+            var param = my_dates.join("||");
+
+            param = param.replace(/\//g, "_");
+
+            var url = "generate_deposit.php?dates=" + param;
+
+            window.open(url, "_blank").focus();
+        });
+    })
+
+
+
 </script>
+<div class="modal_bg" id="viewDepositHistory">
+    <div class="modal">
+
+        <h2 class="table_heading"><span>Deposit History</span></h2>
+        <div class="history_labels">
+            <span class="history_label" id="history_date">8-14-2023</span>
+            <span class="history_label" id="history_class">Pilates</span>
+        </div>
+
+        <hr class="blue">
+
+
+    </div>
+</div>
